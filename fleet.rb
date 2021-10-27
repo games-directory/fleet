@@ -23,9 +23,46 @@ class PlayStation < Sinatra::Base
   before do
     content_type :json
 
+    @@requests ||= 0
+    @@resets_at ||= Time.now + 3600
+
+    # I don't think this is the best approach. This data resets, regardless of the 3rd party API status, whenever
+    # the script is run,
+    # If we don't add some sort of in-memory cache, like Redis, we will have to use games.directory instead, send
+    # a POST each time and store the values in there.
+    # 
+    if Time.now > @@resets_at
+      @@requests = 0
+      @@resets_at = Time.now + 3600
+    end
+
     @@current_request_path = request.env['REQUEST_URI']
+    @@requests += 1
+
+    if @@requests >= 150
+      halt 429, {
+        error: 'Too many requests',
+        message: "You have made #{ @@requests } so far. Please try again later.",
+        resets_at: @@resets_at
+      }.to_json
+    end
 
     HTTP.headers('Authorization' => request.env['HTTP_AUTHORIZATION']) rescue nil
+  end
+
+  get '/heartbeat' do
+    HTTParty.get('https://games.directory/heartbeat',
+      headers: {
+        'User-Agent' => 'Fleet/1.0 (compatible; FleetBot/1.0; https://github.com/games-directory/fleet; info@games.directory'
+      }
+    )
+  end
+
+  get '/stats' do
+    {
+      requests: @@requests,
+      resets_at: @@resets_at
+    }.to_json
   end
 
   # Proof of concept. Might be a bulletproof solution without having to replicate every single endpoint
