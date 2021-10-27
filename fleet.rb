@@ -1,6 +1,4 @@
 require 'sinatra'
-require 'sinatra/reloader'
-
 require 'oj'
 require 'httparty'
 
@@ -15,10 +13,6 @@ end
 class PlayStation < Sinatra::Base
   set :server, 'thin'
   set :logging, true
-
-  configure :development do
-    register Sinatra::Reloader
-  end
 
   before do
     content_type :json
@@ -37,7 +31,6 @@ class PlayStation < Sinatra::Base
     end
 
     @@current_request_path = request.env['REQUEST_URI']
-    @@requests += 1
 
     if @@requests >= 150
       halt 429, {
@@ -73,6 +66,8 @@ class PlayStation < Sinatra::Base
   # we need to do is ensure we pass the authentication, coming from the gem, along with the request.
   # 
   get '/*' do
+    @@requests += 1
+    
     Oj.dump(HTTP.get(@@current_request_path).parsed_response)
   end
 end
