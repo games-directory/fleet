@@ -13,6 +13,9 @@ class HTTP
 end
 
 class PlayStation < Sinatra::Base
+  set :server, 'thin'
+  set :logging, true
+
   configure :development do
     register Sinatra::Reloader
   end
@@ -35,6 +38,6 @@ class PlayStation < Sinatra::Base
   get '/*' do
     Oj.dump(HTTP.get(@@current_request_path).parsed_response)
   end
-
-  self.run! 
 end
+
+PlayStation.run!
