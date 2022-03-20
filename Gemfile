@@ -7,6 +7,9 @@ gem 'thin'
 
 gem 'sinatra'
 gem 'sinatra-contrib'
+gem 'rerun'
 
 gem 'httparty'
 gem 'oj', '~> 3.10'
+
+gem 'pry'
