@@ -13,7 +13,7 @@ end
 class App < Sinatra::Base
   enable :logging
 
-  set :server, 'puma'
+  set :server, :puma
   set :logging, true
 
   before do
