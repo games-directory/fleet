@@ -2,10 +2,18 @@ require 'sinatra'
 require 'sinatra/json'
 require 'httparty'
 require 'oj'
+require 'pry'
 
 class PewPewHTTP
   include HTTParty
   base_uri 'https://my.callofduty.com/api/papi-client'
+  
+  debug_output $stdout
+end
+
+class TrnHTTP
+  include HTTParty
+  base_uri 'https://api.tracker.gg/api/v2'
   
   debug_output $stdout
 end
@@ -34,6 +42,24 @@ class App < Sinatra::Base
     call = PewPewHTTP.post(url, headers: cookie) if request.env['REQUEST_METHOD'] == 'POST'
     
     Oj.dump(call.parsed_response)
+  end
+
+  # TrackerNertwork
+  # 
+  get '/trn/*' do
+    url      = request.env['REQUEST_URI'].gsub('/trn/', '/')
+    response = `curl -s \
+      -X GET 'https://api.tracker.gg/api/v2#{ url }' \
+      -H 'Host: api.tracker.gg' \
+      -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:33.0) Gecko/20100101 Firefox/33.0' \
+      -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' \
+      -H 'Accept-Language: en-US,en;q=0.5' \
+      -H 'Referer: https://api.tracker.gg' \
+      -H 'Cookie: all required cookies will appear here' \
+      -H 'Connection: keep-alive' --compressed
+    `
+
+    response
   end
 
   # Fortnite
