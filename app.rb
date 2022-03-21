@@ -48,10 +48,16 @@ class App < Sinatra::Base
   # 
   get '/trn/*' do
     url      = request.env['REQUEST_URI'].gsub('/trn/', '/')
+
+    user_agents = [
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1',
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 12_1_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16D57'
+    ]
+
     response = `curl -s \
       -X GET 'https://api.tracker.gg/api/v2#{ url }' \
       -H 'Host: api.tracker.gg' \
-      -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:33.0) Gecko/20100101 Firefox/33.0' \
+      -H 'User-Agent: #{ user_agents.sample }' \
       -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' \
       -H 'Accept-Language: en-US,en;q=0.5' \
       -H 'Referer: https://api.tracker.gg' \
