@@ -36,7 +36,9 @@ class App < Sinatra::Base
   # 
   get '/pewpew/*' do
     url    = request.env['REQUEST_URI'].gsub('/pewpew/', '/')
-    cookie = { 'Cookie' => request.env['HTTP_COOKIE'] }
+    cookie = {
+      'Cookie' => request.env['HTTP_COOKIE']
+    }
     
     call = PewPewHTTP.get(url, headers: cookie) if request.env['REQUEST_METHOD'] == 'GET'
     call = PewPewHTTP.post(url, headers: cookie) if request.env['REQUEST_METHOD'] == 'POST'
@@ -47,7 +49,7 @@ class App < Sinatra::Base
   # TrackerNertwork
   # 
   get '/trn/*' do
-    url      = request.env['REQUEST_URI'].gsub('/trn/', '/')
+    url = request.env['REQUEST_URI'].gsub('/trn/', '/')
 
     user_agents = [
       'Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1',
