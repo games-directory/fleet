@@ -53,7 +53,10 @@ class App < Sinatra::Base
 
     user_agents = [
       'Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1',
-      'Mozilla/5.0 (iPhone; CPU iPhone OS 12_1_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16D57'
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 12_1_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16D57',
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148',
+      'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148',
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1'
     ]
 
     response = `curl -s \
@@ -76,19 +79,19 @@ class App < Sinatra::Base
     json({ status: 200 })
   end
   
-  # Fortnite
+  # Xbox Live
   # 
   get '/xbl/*' do
     json({ status: 200 })
   end
   
-  # Fortnite
+  # PlayStation
   # 
   get '/psn/*' do
     json({ status: 200 })
   end
   
-  # Fortnite
+  # Steam
   # 
   get '/steam/*' do
     json({ status: 200 })
